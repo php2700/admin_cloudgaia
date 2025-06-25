@@ -40,32 +40,14 @@ import Dashboard from "layouts/dashboard";
 
 import Sweets from "layouts/sweets";
 import SignIn from "layouts/authentication/sign-in";
-import Add_Sweets from "layouts/sweets/add_Sweets";
-import Edit_Sweets from "layouts/sweets/edit_Sweets";
+
 // @mui icons
 import Icon from "@mui/material/Icon";
+import Overview from "layouts/blogStory";
+import Add_story from "layouts/blogStory/add";
+import Edit_Story from "layouts/blogStory/edit";
 
 const routes = [
-  {
-    type: "collapse",
-    name: "Dashboard",
-    key: "dashboard",
-    icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/dashboard",
-    component: <Dashboard />,
-  },
- 
-  {
-    type: "collapse",
-    name: "Sweets",
-    key: "sweets",
-    icon: <Icon fontSize="small">person</Icon>,
-    route: "/sweets",
-    component: <Sweets />,
-  },
- 
-
-
   {
     type: "collapse",
     name: "Sign In",
@@ -76,19 +58,37 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Add Sweets",
-    key: "add-sweets",
+    name: "Dashboard",
+    key: "dashboard",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/dashboard",
+    component: <Dashboard />,
+  },
+
+  {
+    type: "collapse",
+    name: "Blog Stories",
+    key: "blog Stories",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/blog-story",
+    component: <Overview />,
+  },
+
+  {
+    type: "collapse",
+    name: "Add Blog Story",
+    key: "add-blog-story",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/add-sweets",
-    component: <Add_Sweets />,
+    route: "/add-blog-story",
+    component: <Add_story />,
   },
   {
     type: "collapse",
-    name: "Edit Sweets",
-    key: "edit-sweets",
+    name: "Edit Blog Story",
+    key: "edit-blog-story",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/edit-sweets",
-    component: <Edit_Sweets />,
+    route: "/edit-blog-story",
+    component: <Edit_Story />,
   },
 
 ];

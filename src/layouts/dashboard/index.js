@@ -40,7 +40,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout } from "layouts/common";
 
 function Dashboard() {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const { sales, tasks } = reportsLineChartData;
   const [dashboardData, setDashboardData] = useState({});
 
@@ -60,8 +60,8 @@ function Dashboard() {
       setDashboardData(response?.data?.dashboard);
     } catch (error) {
       if (error?.response?.data?.Message === 'jwt expired') {
-                      logout(navigate)
-                  }
+        logout(navigate)
+      }
       console.error("Error fetching data:", error);
     }
   };
@@ -83,7 +83,7 @@ function Dashboard() {
                 boxShadow: 2,
               },
             }}>
-              <Link to='/users'>
+              <Link to='/dashboard'>
                 <ComplexStatisticsCard
                   color="dark"
                   icon="weekend"
@@ -105,10 +105,10 @@ function Dashboard() {
                 boxShadow: 2,
               },
             }}>
-              <Link to='/invitation'>
+              <Link to='/dashboard'>
                 <ComplexStatisticsCard
                   icon="leaderboard"
-                  title="Invitations"
+                  title="Users"
                   count={dashboardData?.invitations}
                   percentage={{
                     color: "success",
@@ -125,11 +125,11 @@ function Dashboard() {
                 boxShadow: 2,
               },
             }}>
-              <Link to='/decoration'>
+              <Link to='/dashboard'>
                 <ComplexStatisticsCard
                   color="success"
                   icon="store"
-                  title="Decoration"
+                  title="Users"
                   count={dashboardData?.decorations}
                   percentage={{
                     color: "success",
@@ -147,10 +147,10 @@ function Dashboard() {
                 boxShadow: 2,
               },
             }}>
-              <Link to='/designer'><ComplexStatisticsCard
+              <Link to='/dashboard'><ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Designers"
+                title="Users"
                 count={dashboardData?.designers}
                 percentage={{
                   color: "success",
@@ -161,46 +161,8 @@ function Dashboard() {
 
             </MDBox>
           </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5} sx={{
-              "&:hover": {
-                transform: "scale(1.01)",
-                boxShadow: 2,
-              },
-            }}>
-              <Link to='/sweets'><ComplexStatisticsCard
-                color="dark"
-                icon="weekend"
-                title="Sweets"
-                count={dashboardData?.sweets}
-                percentage={{
-                  color: "success",
-                  label: "Just updated",
-                }}
-              /></Link>
 
-            </MDBox>
-          </Grid>
-          <Grid item xs={12} md={6} lg={3}>
-            <MDBox mb={1.5} sx={{
-              "&:hover": {
-                transform: "scale(1.01)",
-                boxShadow: 2,
-              },
-            }}>
-              <Link to='/review'>
-                <ComplexStatisticsCard
-                  icon="leaderboard"
-                  title="Reviews"
-                  count={dashboardData?.reviews}
-                  percentage={{
-                    color: "success",
-                    label: "Just updated",
-                  }}
-                />
-              </Link>
-            </MDBox>
-          </Grid>
+
         </Grid>
       </MDBox>
       {/* <Footer /> */}

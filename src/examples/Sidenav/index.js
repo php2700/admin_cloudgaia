@@ -100,27 +100,9 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
     let returnValue;
 
     if (
-      name === "Add Banner" ||
-      name === "Add Sweets" ||
-      name === "Edit Sweets" ||
-      name === "Add Decoration" ||
-      name === "Add Designer" ||
-      name === "Edit Ads" ||
       name === "Sign In" ||
-      name === "Edit About" ||
-      name === "Add Review" ||
-      name === "Edit Review" ||
-      name === "Add Invitations" ||
-      name === "Add Wedding" ||
-      name === "Add Dry Fruits" ||
-      name === "Add Best Seller" ||
-      name === "Edit Invitation" ||
-      name === "Add Planning" ||
-      name === "Edit Planning" ||
-      name === "Edit Invitation Boxes" ||
-      name === "Edit Discover Sweets" ||
-      name === "Edit Users" ||
-      name === "Edit Banner"
+      name === "Edit Blog Story" ||
+      name === "Add Blog Story"
     ) {
       return null;
     }
