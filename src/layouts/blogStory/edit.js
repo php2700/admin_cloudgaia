@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
@@ -15,54 +15,84 @@ import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 // Data
 import { useMaterialUIController } from "context";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+// Updated imports for Edit page
+import { useNavigate, useParams } from "react-router-dom";
 import InputAdornment from "@mui/material/InputAdornment";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MDInput from "components/MDInput";
-import { sweetsData } from "layouts/staticData/index";
 import { logout } from "layouts/common";
+import { blogCategory } from "layouts/staticData";
 
-
-function Edit_Story() {
-    const location = useLocation();
+function Edit_story() {
+    // Hooks for navigation and getting URL parameters
     const navigate = useNavigate();
-    const { sweetData } = location.state || {};
+    const { id } = useParams(); // Get the story ID from the URL
 
     const token = localStorage.getItem("authToken");
     const [controller] = useMaterialUIController();
     const { sidenavColor } = controller;
 
-    // State for image file and success message
-    const [sweetsImage, setSweetsImage] = useState(null);
-    const [amount, setAmount] = useState(null);
-    const [category, setCategory] = useState(null);
-    const [name, setName] = useState(null);
-    const [_id, setId] = useState();
-    const [open, setOpen] = useState(false)
-    const [description, setDescription] = useState(null);
+    // State for form fields
+    const [storyImage, setStoryImage] = useState(null); // For new image file
+    const [category, setCategory] = useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [previewUrl, setPreviewUrl] = useState(""); // To show existing or new image preview
 
-    const [previewUrl, setPreviewUrl] = useState("");
+    // State for notifications and errors
     const [successSB, setSuccessSB] = useState(false);
     const [error, setError] = useState("");
     const [errors, setErrors] = useState({})
 
-    const sweetsList = sweetsData;
+    // Fetch existing story data on component mount
+    useEffect(() => {
+        const fetchStoryData = async () => {
+            try {
+                const response = await axios.get(
+                    `${process.env.REACT_APP_BASE_URL}api/admin/get-blog-story/${id}`,
+                    {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+                if (response.data && response.data.data) {
+                    const storyData = response.data.data;
+                    setTitle(storyData.title);
+                    setCategory(storyData.category);
+                    setDescription(storyData.description);
+                    setPreviewUrl(storyData.image); // Set existing image URL for preview
+                }
+            } catch (error) {
+                console.error("Failed to fetch story data:", error);
+                if (error?.response?.data?.Message === 'jwt expired') {
+                    logout(navigate);
+                }
+            }
+        };
+
+        if (id) {
+            fetchStoryData();
+        }
+    }, [id, token, navigate]);
+
+
+    // Handle file change
     const handleChangefile = (newFile) => {
         if (newFile && newFile.type.startsWith("image/")) {
-
             const reader = new FileReader();
             reader.onload = (e) => {
                 const img = new Image();
                 img.onload = () => {
                     if (img.width >= 360 && img.height >= 335) {
-                        setSweetsImage(newFile);
-                        setPreviewUrl(URL.createObjectURL(newFile))
+                        setStoryImage(newFile);
+                        setPreviewUrl(URL.createObjectURL(newFile)); // Update preview with new image
                         setError("");
                     } else {
-                        setError("Small Image,Image must be at least 335x360 pixels.");
-                        setSweetsImage(null);
-                        setPreviewUrl("");
+                        setError("Small Image, Image must be at least 335x360 pixels.");
+                        setStoryImage(null);
+                        // Do not clear previewUrl here, so the old image remains visible
                     }
                 };
                 img.src = e.target.result;
@@ -70,99 +100,53 @@ function Edit_Story() {
             reader.readAsDataURL(newFile);
         } else {
             setError("Please select a valid image file.");
-            setSweetsImage(null);
-            setPreviewUrl("");
+            setStoryImage(null);
         }
     };
-
-    useEffect(() => {
-        setId(sweetData?._id)
-        setName(sweetData?.name)
-        setAmount(sweetData?.amount)
-        setCategory(sweetData?.category)
-        setSweetsImage(sweetData?.image)
-        setDescription(sweetData?.description)
-        if (sweetData?.image) {
-            setPreviewUrl(`${process.env.REACT_APP_BASE_URL}uploads/${sweetData?.image}`);
-        }
-    }, [sweetData]);
 
     const handleRemoveImage = () => {
-        setOpen(true)
+        setStoryImage(null);
+        // In edit mode, removing should maybe revert to the original image,
+        // but for simplicity, we clear the preview. User would need to reload to see original.
+        // A better UX might store the original URL separately. For now, let's clear it.
+        setPreviewUrl("");
     };
 
-    const handleClose = () => {
-        setOpen(false)
-    }
-
-    const handleConfirmRemoveImage = () => {
-        setSweetsImage(null);
-        setPreviewUrl("");
-        setOpen(false)
-    }
-
-    const handleSubmit = async () => {
+    const handleUpdate = async () => {
         let allError = {}
 
-
-
-        if (!name) {
-            allError.name = "Please Enter Sweet Name"
-        } else if (!name?.trim()) {
-            allError.name = "Please Enter Sweet Name"
-        } else if (!/^[a-zA-Z\s]*$/.test(name)) {
-            allError.name = "Please Enter Valid Sweet Name"
-        }
-
-        if (!amount) {
-            allError.amount = "Please Enter  Amount."
-        } else if (!amount?.trim()) {
-            allError.amount = "Please Enter  Amount."
+        if (!title?.trim()) {
+            allError.title = "Please Enter title";
         }
 
         if (!category) {
-            allError.category = "Please Select Category."
+            allError.category = "Please Select Category.";
         }
 
-        if (!description) {
+        if (!description?.trim()) {
             allError.description = "Please Add Description.";
-        } else if (!description?.trim()) {
-            allError.description = "Please Enter Sweet description"
         }
 
-        if (Object?.keys(allError)?.length > 0) {
-            setErrors(allError)
-            if (!sweetsImage) {
-                setError("Please upload an Image.");
-            }
-            return
-        }
-
-
-        if (!sweetsImage) {
-            setError("Please upload Image.");
+        if (Object.keys(allError).length > 0) {
+            setErrors(allError);
             return;
         }
 
+        // Image is not mandatory for an update
         const formData = new FormData();
-        formData.append("_id", _id)
-        formData.append("name", name);
-        let formattedAmount;
-        if (amount.includes('kg')) {
-            formattedAmount = `${amount}`;
-        } else {
-            formattedAmount = `${amount}/kg`;
+        // Only append the image if a new one was selected
+        if (storyImage) {
+            formData.append("image", storyImage);
         }
-        formData.append("amount", formattedAmount);
+        formData.append("_id", id); // Include the story ID in the form data
+        formData.append("title", title);
         formData.append("category", category);
-        formData.append("description", description)
-        if (sweetsImage && sweetsImage !== sweetData?.image) {
-            formData.append("image", sweetsImage);
-        }
+        formData.append("description", description);
 
         try {
             const response = await axios.patch(
-                `${process.env.REACT_APP_BASE_URL}api/admin/update_sweets`,
+                // Use the update endpoint with the story ID
+                `${process.env.REACT_APP_BASE_URL}api/admin/update-blog-story/${id}`,
                 formData,
                 {
                     headers: {
@@ -173,23 +157,15 @@ function Edit_Story() {
             );
             if (response.status === 200) {
                 setSuccessSB(true);
-                setSweetsImage(null);
-                setId("")
-                setName("");
-                setAmount("");
-                setDescription("")
-                setCategory("");
-                setErrors({});
-                navigate("/sweets")
+                navigate("/blog-story"); // Navigate back to the list after successful update
             } else {
-                setError("Failed to upload the image.");
+                setError("Failed to update the story.");
             }
         } catch (error) {
+            console.error("Error updating story:", error);
             if (error?.response?.data?.Message === 'jwt expired') {
-                logout(navigate)
+                logout(navigate);
             }
-            console.error("Error uploading banner:", error);
-            // setError("Error uploading the image.");
         }
     };
 
@@ -211,31 +187,30 @@ function Edit_Story() {
                                 coloredShadow="info"
                             >
                                 <MDTypography variant="h6" color="white">
-                                    Edit Sweets
+                                    Edit Blog Story
                                 </MDTypography>
                             </MDBox>
                             <MDBox pt={5} mx={2}>
                                 <MDBox component="form" role="form" sx={{ minHeight: "60vh" }}>
                                     <Grid container spacing={3}>
-                                        <Grid item xs={12} md={6} xl={4} display='flex' justifyContent='center'>
+                                        {/* Category Select */}
+                                        <Grid item xs={12} md={6} xl={4} display="flex" justifyContent="center">
                                             <MDBox mb={2} width='100%'>
                                                 <FormControl fullWidth>
-                                                    <InputLabel id="client-name-label" sx={{ paddingTop: "8px" }}>
-                                                        Category
-                                                    </InputLabel>
+                                                    <InputLabel id="category-label">Category</InputLabel>
                                                     <Select
-                                                        labelId="client-name-label"
-                                                        value={category || ""}
+                                                        labelId="category-label"
+                                                        value={category}
                                                         onChange={(e) => {
-                                                            setCategory(e.target.value)
+                                                            setCategory(e.target.value);
                                                             setErrors((prev) => ({ ...prev, category: "" }));
                                                         }}
-                                                        label="Client Name"
-                                                        sx={{ height: "45px", marginTop: "8px" }}
+                                                        label="Category"
+                                                        sx={{ height: "45px" }}
                                                     >
-                                                        {sweetsList.map((sweets) => (
-                                                            <MenuItem key={sweets} value={sweets}>
-                                                                {sweets}
+                                                        {blogCategory?.map((cat) => (
+                                                            <MenuItem key={cat} value={cat}>
+                                                                {cat}
                                                             </MenuItem>
                                                         ))}
                                                     </Select>
@@ -245,72 +220,55 @@ function Edit_Story() {
                                                 )}
                                             </MDBox>
                                         </Grid>
-                                        <Grid item xs={12} md={6} xl={4} display="flex" justifyContent="center" >
+
+                                        {/* Title Input */}
+                                        <Grid item xs={12} md={6} xl={4} display="flex" justifyContent="center">
                                             <MDBox mb={2} width='100%'>
                                                 <MDInput
                                                     type="text"
-                                                    label="Sweet Name"
+                                                    label="Title"
                                                     fullWidth
-                                                    value={name || ""}
+                                                    value={title}
                                                     onChange={(e) => {
-                                                        setName(e.target.value)
-                                                        setErrors((prev) => ({ ...prev, name: "" }))
+                                                        setTitle(e.target.value);
+                                                        setErrors((prev) => ({ ...prev, title: "" }));
                                                     }}
-                                                    sx={{ marginTop: "8px" }}
                                                 />
-                                                {errors.name && (
-                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{errors.name}</div>
+                                                {errors.title && (
+                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{errors.title}</div>
                                                 )}
                                             </MDBox>
                                         </Grid>
-                                        <Grid item xs={12} md={6} xl={4} display='flex' justifyContent='center'>
+
+                                        {/* Description Input */}
+                                        <Grid item xs={12} md={6} xl={4} display="flex" justifyContent="center">
                                             <MDBox mb={2} width='100%'>
                                                 <MDInput
                                                     type="text"
-                                                    label="Amount Per kg"
+                                                    label="Description"
                                                     fullWidth
-                                                    value={amount?.split('/')[0] || ""}
+                                                    multiline
+                                                    minRows={4}
+                                                    value={description}
                                                     onChange={(e) => {
-                                                        let newAmount = e.target.value;
-                                                        if (/^\d*$/.test(newAmount)) {
-                                                            setAmount(newAmount)
-                                                            setErrors((prev) => ({ ...prev, amount: "" }))
-                                                        }
-                                                    }
-                                                    }
-                                                    sx={{ marginTop: "8px" }}
+                                                        setDescription(e.target.value);
+                                                        setErrors((prev) => ({ ...prev, description: "" }));
+                                                    }}
                                                 />
-                                                {errors.amount && (
-                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{errors.amount}</div>
+                                                {errors.description && (
+                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{errors.description}</div>
                                                 )}
                                             </MDBox>
                                         </Grid>
 
-                                        <Grid item xs={12} md={6} xl={4} mt={1}
-                                            display='flex'
-                                            flexDirection='column'
-                                            alignItems="center"
-                                        >
-                                            <MDBox mb={2}
-                                                width='100%'
-                                                display="flex"
-                                                flexDirection="column"
-                                            >
+                                        {/* Image Upload and Preview */}
+                                        <Grid item xs={12} md={6} xl={4} mt={1} display="flex" flexDirection='column' alignItems="center">
+                                            <MDBox mb={2} width='100%' display="flex" flexDirection="column">
                                                 <MuiFileInput
-                                                    // value={sweetsImage || null}
-                                                    value={sweetsImage instanceof File ? sweetsImage : null}
-
+                                                    value={storyImage}
                                                     onChange={handleChangefile}
-                                                    // placeholder="Upload Image"
-                                                    placeholder={
-                                                        !previewUrl && !sweetsImage
-                                                            ? "Upload Sweet Image"
-                                                            : previewUrl
-                                                                ? "Edit Sweet Image"
-                                                                : "Replace Image"
-                                                    }
+                                                    placeholder="Upload New Image (Optional)"
                                                     fullWidth
-                                                    minHeight={'450px'}
                                                     InputProps={{
                                                         startAdornment: (
                                                             <InputAdornment position="start">
@@ -320,16 +278,14 @@ function Edit_Story() {
                                                     }}
                                                 />
                                                 {error && (
-                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>
-                                                        {error}
-                                                    </div>
+                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{error}</div>
                                                 )}
                                             </MDBox>
                                             {previewUrl && (
-                                                <MDBox mt={2} sx={{ textAlign: "center" }}>
+                                                <MDBox mt={1} sx={{ textAlign: "center" }}>
                                                     <img
                                                         src={previewUrl}
-                                                        alt="Preview"
+                                                        alt="Story Preview"
                                                         style={{
                                                             width: "360px",
                                                             height: "335px",
@@ -339,47 +295,17 @@ function Edit_Story() {
                                                         }}
                                                     />
                                                     <MDBox mt={1}>
-                                                        <MDTypography variant="caption" color="text">
-                                                            {sweetsImage?.name}
-                                                        </MDTypography>
-                                                        <IconButton
-                                                            onClick={handleRemoveImage}
-                                                            color="error"
-                                                            size="small"
-                                                            sx={{ ml: 1 }}
-                                                        >
+                                                        <IconButton onClick={handleRemoveImage} color="error" size="small" sx={{ ml: 1 }}>
                                                             <DeleteIcon />
                                                         </IconButton>
                                                     </MDBox>
                                                 </MDBox>
                                             )}
                                         </Grid>
-                                        <Grid item xs={12} md={6} xl={4} display="flex" justifyContent="center">
-                                            <MDBox mb={2} width='100%'>
-                                                <MDInput
-                                                    type="text"
-                                                    label="Box Description"
-                                                    fullWidth
-                                                    multiline
-                                                    minRows={4}
-                                                    value={description}
-                                                    onChange={(e) => {
-                                                        setDescription(e.target.value)
-                                                        setErrors((prev) => ({ ...prev, description: "" }))
-                                                    }
-                                                    }
-                                                    sx={{ marginTop: "8px" }}
-                                                />
-                                                {errors.description && (
-                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{errors.description}</div>
-                                                )}
-                                            </MDBox>
-                                        </Grid>
-
                                     </Grid>
                                     <MDBox mt={4} mb={1} sx={{ textAlign: "center" }}>
-                                        <MDButton variant="gradient" color="info" onClick={handleSubmit}>
-                                            Edit
+                                        <MDButton variant="gradient" color="info" onClick={handleUpdate}>
+                                            Update Story
                                         </MDButton>
                                     </MDBox>
                                 </MDBox>
@@ -392,17 +318,16 @@ function Edit_Story() {
             <MDSnackbar
                 color="success"
                 icon="check"
-                title="Banner Upload"
-                content="Banner uploaded successfully!"
-                dateTime="0 Sec ago"
+                title="Story Update"
+                content="Story updated successfully!"
+                dateTime="Just now"
                 open={successSB}
                 onClose={() => setSuccessSB(false)}
                 close={() => setSuccessSB(false)}
                 bgWhite
             />
-
         </DashboardLayout>
     );
 }
 
-export default Edit_Story;
+export default Edit_story;

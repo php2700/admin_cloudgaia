@@ -36,6 +36,7 @@ Coded by www.creative-tim.com
 */
 
 // Material Dashboard 2 React layouts
+
 import Dashboard from "layouts/dashboard";
 
 import Sweets from "layouts/sweets";
@@ -46,6 +47,7 @@ import Icon from "@mui/material/Icon";
 import Overview from "layouts/blogStory";
 import Add_story from "layouts/blogStory/add";
 import Edit_Story from "layouts/blogStory/edit";
+
 
 const routes = [
   {
@@ -88,6 +90,15 @@ const routes = [
     key: "edit-blog-story",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/edit-blog-story",
+    component: <Edit_Story />,
+  },
+   {
+    // *** सबसे महत्वपूर्ण बदलाव यहाँ है ***
+    // यह राउट भी साइडबार में नहीं दिखेगा
+    type: "collapse",
+    key: "edit-blog-story",
+    // राउट के अंत में :id जोड़ा गया है
+    route: "/update-blog-story/:id", 
     component: <Edit_Story />,
   },
 

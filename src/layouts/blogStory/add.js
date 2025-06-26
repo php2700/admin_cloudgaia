@@ -194,22 +194,25 @@ function Add_story() {
                                         </Grid>
 
                                         <Grid item xs={12} md={6} xl={4} display="flex" justifyContent="center">
-                                            <MDBox mb={2} width='100%' >
+                                            <MDBox mb={2} width='100%'>
                                                 <MDInput
                                                     type="text"
                                                     label="Title"
                                                     fullWidth
                                                     value={title}
                                                     onChange={(e) => {
-
                                                         setTitle(e.target.value)
                                                         setErrors((prev) => ({ ...prev, title: "" }))
-
                                                     }}
                                                     sx={{ marginTop: "8px" }}
                                                 />
+
+                                                <br /> {/* <-- YAHAN EK EXTRA LINE BREAK ADD KIYA HAI */}
+
                                                 {errors.title && (
-                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>{errors.title}</div>
+                                                    <div style={{ color: "red", fontSize: "12px", fontWeight: 350, marginTop: "8px" }}>
+                                                        {errors.title}
+                                                    </div>
                                                 )}
                                             </MDBox>
                                         </Grid>
@@ -250,7 +253,7 @@ function Add_story() {
                                                     value={storyImage}
                                                     onChange={handleChangefile}
                                                     placeholder="Upload Image"
-                                                    fullWidth
+                                                    fullWidth 
                                                     minHeight={'450px'}
                                                     InputProps={{
                                                         startAdornment: (
@@ -297,7 +300,7 @@ function Add_story() {
                                                 </MDBox>
                                             )}
                                         </Grid>
-                                        
+
 
 
 
@@ -331,5 +334,290 @@ function Add_story() {
         </DashboardLayout>
     );
 }
-
 export default Add_story;
+
+// export default Add_story;
+// import React, { useState } from "react";
+// import Grid from "@mui/material/Grid";
+// import Card from "@mui/material/Card";
+// import MDBox from "components/MDBox";
+// import MDTypography from "components/MDTypography";
+// import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
+// import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+// import MDButton from "components/MDButton";
+// import MDSnackbar from "components/MDSnackbar";
+// import { MuiFileInput } from "mui-file-input";
+// import AttachFileIcon from "@mui/icons-material/AttachFile";
+// import { FormControl, InputLabel, Select, MenuItem, InputAdornment, IconButton } from "@mui/material";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import MDInput from "components/MDInput";
+// import { useMaterialUIController } from "context";
+// import axios from "axios";
+// import { useNavigate } from "react-router-dom";
+// import { logout } from "layouts/common";
+// import { blogCategory } from "layouts/staticData";
+
+// function Add_story() {
+//   const navigate = useNavigate();
+//   const token = localStorage.getItem("authToken");
+//   const [controller] = useMaterialUIController();
+//   const { sidenavColor } = controller;
+
+//   const [storyImage, setStoryImage] = useState(null);
+//   const [previewUrl, setPreviewUrl] = useState("");
+//   const [category, setCategory] = useState("");
+//   const [title, setTitle] = useState("");
+//   const [description, setDescription] = useState("");
+//   const [successSB, setSuccessSB] = useState(false);
+//   const [error, setError] = useState("");
+//   const [errors, setErrors] = useState({});
+
+//   const handleChangefile = (newFile) => {
+//     if (newFile && newFile.type.startsWith("image/")) {
+//       const reader = new FileReader();
+//       reader.onload = (e) => {
+//         const img = new Image();
+//         img.onload = () => {
+//           if (img.width >= 360 && img.height >= 335) {
+//             setStoryImage(newFile);
+//             setPreviewUrl(URL.createObjectURL(newFile));
+//             setError("");
+//           } else {
+//             setError("Image must be at least 360x335 pixels.");
+//             setStoryImage(null);
+//             setPreviewUrl("");
+//           }
+//         };
+//         img.src = e.target.result;
+//       };
+//       reader.readAsDataURL(newFile);
+//     } else {
+//       setError("Please select a valid image file.");
+//       setStoryImage(null);
+//       setPreviewUrl("");
+//     }
+//   };
+
+//   const handleRemoveImage = () => {
+//     setStoryImage(null);
+//     setPreviewUrl("");
+//     setError("");
+//   };
+
+//   const handleSubmit = async () => {
+//     const newErrors = {};
+
+//     if (!title || !title.trim()) newErrors.title = "Please enter title.";
+//     if (!category) newErrors.category = "Please select category.";
+//     if (!description || !description.trim()) newErrors.description = "Please add description.";
+
+//     setErrors(newErrors);
+
+//     if (!storyImage) {
+//       setError("Please upload an image.");
+//     }
+
+//     if (Object.keys(newErrors).length > 0 || !storyImage) return;
+
+//     const formData = new FormData();
+//     formData.append("image", storyImage);
+//     formData.append("title", title.trim());
+//     formData.append("category", category);
+//     formData.append("description", description.trim());
+
+//     try {
+//       const response = await axios.post(
+//         `${process.env.REACT_APP_BASE_URL}api/admin/add-blog-story`,
+//         formData,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "multipart/form-data",
+//           },
+//         }
+//       );
+
+//       if (response.status === 200) {
+//         setSuccessSB(true);
+//         setStoryImage(null);
+//         setTitle("");
+//         setCategory("");
+//         setDescription("");
+//         setPreviewUrl("");
+//         setErrors({});
+//         navigate("/blog-story");
+//       } else {
+//         setError("Failed to upload the story.");
+//       }
+//     } catch (err) {
+//       if (err?.response?.data?.Message === "jwt expired") logout(navigate);
+//       else console.error("Upload error:", err);
+//     }
+//   };
+
+//   return (
+//     <DashboardLayout>
+//       <DashboardNavbar />
+//       <MDBox pt={6} pb={3}>
+//         <Grid container spacing={6}>
+//           <Grid item xs={12}>
+//             <Card>
+//               <MDBox
+//                 mx={2}
+//                 mt={-3}
+//                 py={3}
+//                 px={2}
+//                 variant="gradient"
+//                 bgColor={sidenavColor}
+//                 borderRadius="lg"
+//                 coloredShadow="info"
+//               >
+//                 <MDTypography variant="h6" color="white">
+//                   Add Blog Story
+//                 </MDTypography>
+//               </MDBox>
+
+//               <MDBox pt={5} mx={2}>
+//                 <MDBox component="form" role="form" sx={{ minHeight: "60vh" }}>
+//                   <Grid container spacing={3}>
+//                     <Grid item xs={12} md={6} xl={4}>
+//                       <FormControl fullWidth>
+//                         <InputLabel id="category-label">Category</InputLabel>
+//                         <Select
+//                           labelId="category-label"
+//                           value={category}
+//                           onChange={(e) => {
+//                             setCategory(e.target.value);
+//                             setErrors((prev) => ({ ...prev, category: "" }));
+//                           }}
+//                           label="Category"
+//                           sx={{ height: "45px", mt: 1 }}
+//                         >
+//                           {blogCategory?.map((cat) => (
+//                             <MenuItem key={cat} value={cat}>
+//                               {cat}
+//                             </MenuItem>
+//                           ))}
+//                         </Select>
+//                         {errors.category && (
+//                           <div style={{ color: "red", fontSize: "12px", marginTop: "8px" }}>
+//                             {errors.category}
+//                           </div>
+//                         )}
+//                       </FormControl>
+//                     </Grid>
+
+//                     <Grid item xs={12} md={6} xl={4}>
+//                       <MDInput
+//                         type="text"
+//                         label="Title"
+//                         fullWidth
+//                         value={title}
+//                         onChange={(e) => {
+//                           setTitle(e.target.value);
+//                           setErrors((prev) => ({ ...prev, title: "" }));
+//                         }}
+//                         sx={{ mt: 1 }}
+//                       />
+//                       {errors.title && (
+//                         <div style={{ color: "red", fontSize: "12px", marginTop: "8px" }}>
+//                           {errors.title}
+//                         </div>
+//                       )}
+//                     </Grid>
+
+//                     <Grid item xs={12} md={6} xl={4}>
+//                       <MDInput
+//                         type="text"
+//                         label="Description"
+//                         fullWidth
+//                         multiline
+//                         minRows={4}
+//                         value={description}
+//                         onChange={(e) => {
+//                           setDescription(e.target.value);
+//                           setErrors((prev) => ({ ...prev, description: "" }));
+//                         }}
+//                         sx={{ mt: 1 }}
+//                       />
+//                       {errors.description && (
+//                         <div style={{ color: "red", fontSize: "12px", marginTop: "8px" }}>
+//                           {errors.description}
+//                         </div>
+//                       )}
+//                     </Grid>
+
+//                     <Grid item xs={12} md={6} xl={4} mt={1} display="flex" flexDirection="column" alignItems="center">
+//                       <MDBox mb={2} width="100%">
+//                         <MuiFileInput
+//                           value={storyImage}
+//                           onChange={handleChangefile}
+//                           placeholder="Upload Image"
+//                           fullWidth
+//                           InputProps={{
+//                             startAdornment: (
+//                               <InputAdornment position="start">
+//                                 <AttachFileIcon sx={{ mr: 1, color: "#757575" }} />
+//                               </InputAdornment>
+//                             ),
+//                           }}
+//                         />
+//                         {error && (
+//                           <div style={{ color: "red", fontSize: "12px", marginTop: "8px" }}>{error}</div>
+//                         )}
+//                       </MDBox>
+
+//                       {previewUrl && (
+//                         <MDBox mt={1} textAlign="center">
+//                           <img
+//                             src={previewUrl}
+//                             alt="Preview"
+//                             style={{
+//                               width: "360px",
+//                               height: "335px",
+//                               objectFit: "cover",
+//                               borderRadius: "8px",
+//                               marginTop: "8px",
+//                             }}
+//                           />
+//                           <MDBox mt={1}>
+//                             <MDTypography variant="caption" color="text">
+//                               {storyImage?.name}
+//                             </MDTypography>
+//                             <IconButton onClick={handleRemoveImage} color="error" size="small" sx={{ ml: 1 }}>
+//                               <DeleteIcon />
+//                             </IconButton>
+//                           </MDBox>
+//                         </MDBox>
+//                       )}
+//                     </Grid>
+//                   </Grid>
+
+//                   <MDBox mt={4} mb={1} textAlign="center">
+//                     <MDButton variant="gradient" color="info" onClick={handleSubmit}>
+//                       Upload Story
+//                     </MDButton>
+//                   </MDBox>
+//                 </MDBox>
+//               </MDBox>
+//             </Card>
+//           </Grid>
+//         </Grid>
+//       </MDBox>
+
+//       <MDSnackbar
+//         color="success"
+//         icon="check"
+//         title="Story Upload"
+//         content="Blog story uploaded successfully!"
+//         dateTime="Just now"
+//         open={successSB}
+//         onClose={() => setSuccessSB(false)}
+//         close={() => setSuccessSB(false)}
+//         bgWhite
+//       />
+//     </DashboardLayout>
+//   );
+// }
+
+// export default Add_story;
