@@ -257,9 +257,9 @@ function Overview() {
                                                                 variant="caption"
                                                                 color="text"
                                                                 fontWeight="medium"
-                                                            >{console.log(`${process.env.REACT_APP_BASE_URL}uploads/${blog?.image}`)}
+                                                            >{console.log(`${process.env.REACT_APP_BASE_URL}${blog?.image}`)}
                                                                 <img
-                                                                    src={`${process.env.REACT_APP_BASE_URL}uploads/${blog?.image}`}
+                                                                    src={`${process.env.REACT_APP_BASE_URL}${blog?.image}`}
                                                                     alt="Banner"
                                                                     style={{ width: "100px", height: "100px", borderRadius: "5px" }}
                                                                 />
