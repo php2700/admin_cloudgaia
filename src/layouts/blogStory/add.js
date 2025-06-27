@@ -199,10 +199,12 @@ function Add_story() {
                                                     type="text"
                                                     label="Title"
                                                     fullWidth
+                                                    multiline   // ✅ Add this line
+                                                    minRows={2} // ✅ Optional: sets minimum visible rows
                                                     value={title}
                                                     onChange={(e) => {
-                                                        setTitle(e.target.value)
-                                                        setErrors((prev) => ({ ...prev, title: "" }))
+                                                        setTitle(e.target.value);
+                                                        setErrors((prev) => ({ ...prev, title: "" }));
                                                     }}
                                                     sx={{ marginTop: "8px" }}
                                                 />
@@ -253,7 +255,7 @@ function Add_story() {
                                                     value={storyImage}
                                                     onChange={handleChangefile}
                                                     placeholder="Upload Image"
-                                                    fullWidth 
+                                                    fullWidth
                                                     minHeight={'450px'}
                                                     InputProps={{
                                                         startAdornment: (

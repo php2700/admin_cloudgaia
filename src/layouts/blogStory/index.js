@@ -309,7 +309,7 @@ function Overview() {
                                                             </MDTypography>
                                                         ),
                                                         Edit: (
-                                                            <Link to={`/edit-blog-story`}
+                                                            <Link to={`/edit-blog-story/${blog._id}`}
                                                                 state={{ blogData: blog }}
                                                             >
                                                                 <MDTypography

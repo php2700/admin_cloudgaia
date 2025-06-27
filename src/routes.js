@@ -89,7 +89,7 @@ const routes = [
     name: "Edit Blog Story",
     key: "edit-blog-story",
     icon: <Icon fontSize="small">login</Icon>,
-    route: "/edit-blog-story",
+    route: "/edit-blog-story/:id",
     component: <Edit_Story />,
   },
    {
@@ -102,6 +102,7 @@ const routes = [
     component: <Edit_Story />,
   },
 
+  
 ];
 
 export default routes;
