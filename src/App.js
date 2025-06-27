@@ -50,8 +50,8 @@ import routes from "routes";
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
 
 // Images
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/Laaagi.png"
+import brandWhite from "assets/images/faviconadmin.jpg";
+import brandDark from "assets/images/faviconadmin.jpg";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
