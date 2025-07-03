@@ -47,6 +47,12 @@ import Icon from "@mui/material/Icon";
 import Overview from "layouts/blogStory";
 import Add_story from "layouts/blogStory/add";
 import Edit_Story from "layouts/blogStory/edit";
+import Contact from "layouts/contact";
+import Career from "layouts/career";
+import Innovation from "layouts/innovation";
+import Growth from "layouts/growth";
+import Implementation from "layouts/implemention";
+import Optimization from "layouts/optimization";
 
 
 const routes = [
@@ -92,17 +98,56 @@ const routes = [
     route: "/edit-blog-story/:id",
     component: <Edit_Story />,
   },
-   {
-    // *** सबसे महत्वपूर्ण बदलाव यहाँ है ***
-    // यह राउट भी साइडबार में नहीं दिखेगा
+  {
     type: "collapse",
-    key: "edit-blog-story",
-    // राउट के अंत में :id जोड़ा गया है
-    route: "/update-blog-story/:id", 
-    component: <Edit_Story />,
+    name: "contact",
+    key: "contact",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/contact",
+    component: <Contact />,
+  },
+  {
+    type: "collapse",
+    name: "career",
+    key: "career",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/career",
+    component: <Career />,
+  },
+ {
+    type: "collapse",
+    name: "innovation",
+    key: "innovation",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/innovation",
+    component: <Innovation />,
+  },
+  {
+    type: "collapse",
+    name: "growth",
+    key: "growth",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/growth",
+    component: <Growth />,
   },
 
-  
+    {
+    type: "collapse",
+    name: "implementation",
+    key: "implementation",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/implementation",
+    component: <Implementation />,
+  },
+    {
+    type: "collapse",
+    name: "optimization",
+    key: "optimization",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/optimization",
+    component: <Optimization />,
+  },
+
 ];
 
 export default routes;
