@@ -185,7 +185,7 @@ function Implementation() {
                                     coloredShadow="info"
                                 >
                                     <MDTypography variant="h6" color="white">
-                                        Contact
+                                        Implementation
                                     </MDTypography>
                                 </MDBox>
                                 <MDBox pt={3}>

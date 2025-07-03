@@ -185,7 +185,7 @@ function Innovation() {
                                     coloredShadow="info"
                                 >
                                     <MDTypography variant="h6" color="white">
-                                        Contact
+                                        Innovation
                                     </MDTypography>
                                 </MDBox>
                                 <MDBox pt={3}>
@@ -225,13 +225,13 @@ function Innovation() {
                                                             width: "15%",
                                                             align: "left",
                                                         },
-                                                            {
+                                                        {
                                                             Header: "Country ",
                                                             accessor: "Country",
                                                             width: "15%",
                                                             align: "left",
                                                         },
-                                                            {
+                                                        {
                                                             Header: "Message ",
                                                             accessor: "Message",
                                                             width: "15%",
@@ -251,7 +251,7 @@ function Innovation() {
                                                             </MDTypography>
                                                         ),
                                                         Name: (
-                                                              <MDTypography
+                                                            <MDTypography
                                                                 component="a"
                                                                 variant="caption"
                                                                 color="text"
@@ -262,14 +262,14 @@ function Innovation() {
                                                         ),
                                                         LastName: (
                                                             (
-                                                                   <MDTypography
-                                                                component="a"
-                                                                variant="caption"
-                                                                color="text"
-                                                                fontWeight="medium"
-                                                            >
-                                                                {innovation?.lastName}
-                                                            </MDTypography>
+                                                                <MDTypography
+                                                                    component="a"
+                                                                    variant="caption"
+                                                                    color="text"
+                                                                    fontWeight="medium"
+                                                                >
+                                                                    {innovation?.lastName}
+                                                                </MDTypography>
                                                             )
                                                         ),
                                                         Email: (
@@ -282,7 +282,7 @@ function Innovation() {
                                                                 {innovation?.email}
                                                             </MDTypography>
                                                         ),
-                                                        
+
                                                         Company: (
                                                             <MDTypography
                                                                 component="a"
@@ -303,7 +303,7 @@ function Innovation() {
                                                                 {innovation.country}
                                                             </MDTypography>
                                                         ),
-                                                         Message: (
+                                                        Message: (
                                                             <MDTypography
                                                                 component="a"
                                                                 variant="caption"

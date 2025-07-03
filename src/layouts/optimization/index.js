@@ -87,19 +87,19 @@ function Optimization() {
                     },
                 }
             );
-            const datas = response?.data?.ptimizationData?.data;
-            setTotal_rows(response?.data?.ptimizationData?.total);
-            setFirstpageurl(response?.data?.ptimizationData?.first_page_url);
-            setFrom(response?.data?.ptimizationData?.from);
-            setLastpage(response?.data?.ptimizationData?.last_page);
-            setLastpageurl(response?.data?.ptimizationData?.last_page_url);
-            setLinks(response?.data?.ptimizationData?.links);
-            setNextpageurl(response?.data?.ptimizationData?.next_page_url);
-            setPath(response?.data?.ptimizationData?.path);
-            setPer_page(response?.data?.ptimizationData?.per_page);
-            setPrevpageurl(response?.data?.ptimizationData?.prev_page_url);
-            setTotal(response?.data?.ptimizationData?.total);
-            setCurrentpage(response?.data?.ptimizationData?.current_page);
+            const datas = response?.data?.optimizationData?.data;
+            setTotal_rows(response?.data?.optimizationData?.total);
+            setFirstpageurl(response?.data?.optimizationData?.first_page_url);
+            setFrom(response?.data?.optimizationData?.from);
+            setLastpage(response?.data?.optimizationData?.last_page);
+            setLastpageurl(response?.data?.optimizationData?.last_page_url);
+            setLinks(response?.data?.optimizationData?.links);
+            setNextpageurl(response?.data?.optimizationData?.next_page_url);
+            setPath(response?.data?.optimizationData?.path);
+            setPer_page(response?.data?.optimizationData?.per_page);
+            setPrevpageurl(response?.data?.optimizationData?.prev_page_url);
+            setTotal(response?.data?.optimizationData?.total);
+            setCurrentpage(response?.data?.optimizationData?.current_page);
 
             const modifiedData = datas.map((optimization) => {
                 return {
@@ -185,7 +185,7 @@ function Optimization() {
                                     coloredShadow="info"
                                 >
                                     <MDTypography variant="h6" color="white">
-                                        Contact
+                                        Optimization
                                     </MDTypography>
                                 </MDBox>
                                 <MDBox pt={3}>

@@ -185,7 +185,7 @@ function Growth() {
                                     coloredShadow="info"
                                 >
                                     <MDTypography variant="h6" color="white">
-                                        Contact
+                                        Growth
                                     </MDTypography>
                                 </MDBox>
                                 <MDBox pt={3}>
