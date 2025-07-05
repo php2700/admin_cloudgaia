@@ -45,11 +45,11 @@ import { logout } from "layouts/common";
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-function Growth() {
+function BlogComment() {
     const navigate = useNavigate();
     const [controller] = useMaterialUIController();
     const { sidenavColor } = controller;
-    const [growthData, setGrowthData] = useState([]);
+    const [blogCommentData, setBlogCommentData] = useState([]);
     const [newPage, setNewPage] = useState(1);
     const [searchText, setSearchText] = useState("");
     const [total_rows, setTotal_rows] = useState("");
@@ -73,10 +73,10 @@ function Growth() {
 
 
     const token = localStorage.getItem("authToken");
-    const getGrowthData = async (page, search) => {
+    const getBlogCommentData = async (page, search) => {
         try {
             const response = await axios.get(
-                `${process.env.REACT_APP_BASE_URL}api/admin/growth-list`,
+                `${process.env.REACT_APP_BASE_URL}api/admin/blog-comments`,
                 {
                     params: {
                         page: page,
@@ -87,33 +87,31 @@ function Growth() {
                     },
                 }
             );
-            const datas = response?.data?.growthData?.data;
-            setTotal_rows(response?.data?.growthData?.total);
-            setFirstpageurl(response?.data?.growthData?.first_page_url);
-            setFrom(response?.data?.growthData?.from);
-            setLastpage(response?.data?.growthData?.last_page);
-            setLastpageurl(response?.data?.growthData?.last_page_url);
-            setLinks(response?.data?.growthData?.links);
-            setNextpageurl(response?.data?.growthData?.next_page_url);
-            setPath(response?.data?.growthData?.path);
-            setPer_page(response?.data?.growthData?.per_page);
-            setPrevpageurl(response?.data?.growthData?.prev_page_url);
-            setTotal(response?.data?.growthData?.total);
-            setCurrentpage(response?.data?.growthData?.current_page);
+            const datas = response?.data?.blogCommentData?.data;
+            setTotal_rows(response?.data?.blogCommentData?.total);
+            setFirstpageurl(response?.data?.blogCommentData?.first_page_url);
+            setFrom(response?.data?.blogCommentData?.from);
+            setLastpage(response?.data?.blogCommentData?.last_page);
+            setLastpageurl(response?.data?.blogCommentData?.last_page_url);
+            setLinks(response?.data?.blogCommentData?.links);
+            setNextpageurl(response?.data?.blogCommentData?.next_page_url);
+            setPath(response?.data?.blogCommentData?.path);
+            setPer_page(response?.data?.blogCommentData?.per_page);
+            setPrevpageurl(response?.data?.blogCommentData?.prev_page_url);
+            setTotal(response?.data?.blogCommentData?.total);
+            setCurrentpage(response?.data?.blogCommentData?.current_page);
 
-            const modifiedData = datas.map((growth) => {
+            const modifiedData = datas.map((blogComment) => {
                 return {
-                    _id: growth._id,
-                    firstName: growth?.firstName,
-                    lastName: growth?.lastName,
-                    company: growth?.company,
-                    email: growth?.email,
-                    country: growth?.country,
-                    message: growth?.message
+                    _id: blogComment._id,
+                    name: blogComment?.name,
+                    comment: blogComment?.comment,
+                    image: blogComment?.blogId?.image,
+                    userImg: blogComment?.image
                 };
             });
 
-            setGrowthData(modifiedData);
+            setBlogCommentData(modifiedData);
         } catch (error) {
             if (error?.response?.data?.Message === 'jwt expired') {
                 logout(navigate)
@@ -128,7 +126,7 @@ function Growth() {
     };
 
     const ApiCall = () => {
-        getGrowthData(newPage, searchText);
+        getBlogCommentData(newPage, searchText);
     };
     // Calculate the total number of pages based on the data you receive
     const totalPages = Math.ceil(total_rows / per_page);
@@ -143,7 +141,7 @@ function Growth() {
     );
 
     useEffect(() => {
-        getGrowthData(newPage, searchText);
+        getBlogCommentData(newPage, searchText);
     }, [newPage, searchText]);
 
     const handleDelete = (id) => {
@@ -190,7 +188,7 @@ function Growth() {
                                 </MDBox>
                                 <MDBox pt={3}>
 
-                                    {growthData?.length === 0 ? (
+                                    {blogCommentData?.length === 0 ? (
                                         <p style={{ textAlign: "center", fontWeight: "500", paddingBottom: "10px" }}>
                                             No Data Found
                                         </p>
@@ -201,45 +199,32 @@ function Growth() {
                                                     columns: [
                                                         { Header: "ID", accessor: "orderId", width: "1%", align: "left" },
                                                         {
+                                                            Header: "Image ",
+                                                            accessor: "Image",
+                                                            width: "15%",
+                                                            align: "left",
+                                                        },
+                                                        {
+                                                            Header: "userProfile ",
+                                                            accessor: "userProfile",
+                                                            width: "15%",
+                                                            align: "left",
+                                                        },
+                                                        {
                                                             Header: "Name ",
                                                             accessor: "Name",
                                                             width: "15%",
                                                             align: "left",
                                                         },
                                                         {
-                                                            Header: "LastName ",
-                                                            accessor: "LastName",
-                                                            width: "15%",
-                                                            align: "left",
-                                                        },
-
-                                                        {
-                                                            Header: "Email ",
-                                                            accessor: "Email",
-                                                            width: "15%",
-                                                            align: "left",
-                                                        },
-                                                        {
-                                                            Header: "Company ",
-                                                            accessor: "Company",
-                                                            width: "15%",
-                                                            align: "left",
-                                                        },
-                                                        {
-                                                            Header: "Country ",
-                                                            accessor: "Country",
-                                                            width: "15%",
-                                                            align: "left",
-                                                        },
-                                                        {
-                                                            Header: "Message ",
-                                                            accessor: "Message",
+                                                            Header: "Comment ",
+                                                            accessor: "Comment",
                                                             width: "15%",
                                                             align: "left",
                                                         },
                                                     ],
 
-                                                    rows: growthData.map((growth, index) => ({
+                                                    rows: blogCommentData.map((blog, index) => ({
                                                         orderId: (
                                                             <MDTypography
                                                                 component="a"
@@ -250,6 +235,34 @@ function Growth() {
                                                                 {index + 1}
                                                             </MDTypography>
                                                         ),
+                                                        Image: (
+                                                            <MDTypography
+                                                                component="a"
+                                                                variant="caption"
+                                                                color="text"
+                                                                fontWeight="medium"
+                                                            >{console.log(`${process.env.REACT_APP_BASE_URL}${blog?.image}`)}
+                                                                <img
+                                                                    src={`${process.env.REACT_APP_BASE_URL}${blog?.image}`}
+                                                                    alt="Banner"
+                                                                    style={{ width: "100px", height: "100px", borderRadius: "5px" }}
+                                                                />
+                                                            </MDTypography>
+                                                        ),
+                                                        userProfile: (
+                                                            <MDTypography
+                                                                component="a"
+                                                                variant="caption"
+                                                                color="text"
+                                                                fontWeight="medium"
+                                                            >{console.log(`${process.env.REACT_APP_BASE_URL}${blog?.userImg}`)}
+                                                                <img
+                                                                    src={`${process.env.REACT_APP_BASE_URL}${blog?.userImg}`}
+                                                                    alt="user Img"
+                                                                    style={{ width: "100px", height: "100px", borderRadius: "5px" }}
+                                                                />
+                                                            </MDTypography>
+                                                        ),
                                                         Name: (
                                                             <MDTypography
                                                                 component="a"
@@ -257,10 +270,10 @@ function Growth() {
                                                                 color="text"
                                                                 fontWeight="medium"
                                                             >
-                                                                {growth?.firstName}
+                                                                {blog?.name}
                                                             </MDTypography>
                                                         ),
-                                                        LastName: (
+                                                        Comment: (
                                                             (
                                                                 <MDTypography
                                                                     component="a"
@@ -268,31 +281,11 @@ function Growth() {
                                                                     color="text"
                                                                     fontWeight="medium"
                                                                 >
-                                                                    {growth?.lastName}
+                                                                    {blog?.comment}
                                                                 </MDTypography>
                                                             )
                                                         ),
-                                                        Email: (
-                                                            <MDTypography
-                                                                component="a"
-                                                                variant="caption"
-                                                                color="text"
-                                                                fontWeight="medium"
-                                                            >
-                                                                {growth?.email}
-                                                            </MDTypography>
-                                                        ),
 
-                                                        Company: (
-                                                            <MDTypography
-                                                                component="a"
-                                                                variant="caption"
-                                                                color="text"
-                                                                fontWeight="medium"
-                                                            >
-                                                                {growth.company}
-                                                            </MDTypography>
-                                                        ),
                                                         Country: (
                                                             <MDTypography
                                                                 component="a"
@@ -300,19 +293,10 @@ function Growth() {
                                                                 color="text"
                                                                 fontWeight="medium"
                                                             >
-                                                                {growth.country}
+                                                                {blog.country}
                                                             </MDTypography>
                                                         ),
-                                                        Message: (
-                                                            <MDTypography
-                                                                component="a"
-                                                                variant="caption"
-                                                                color="text"
-                                                                fontWeight="medium"
-                                                            >
-                                                                {growth.message}
-                                                            </MDTypography>
-                                                        ),
+
                                                     })),
                                                 }}
                                                 isSorted={false}
@@ -366,4 +350,4 @@ function Growth() {
     );
 }
 
-export default Growth;
+export default BlogComment;

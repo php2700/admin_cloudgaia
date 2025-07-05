@@ -53,6 +53,7 @@ import Innovation from "layouts/innovation";
 import Growth from "layouts/growth";
 import Implementation from "layouts/implemention";
 import Optimization from "layouts/optimization";
+import BlogComment from "layouts/blogComment";
 
 
 const routes = [
@@ -147,6 +148,14 @@ const routes = [
     route: "/optimization",
     component: <Optimization />,
   },
+  // {
+  //   type: "collapse",
+  //   name: "blog-comments",
+  //   key: "blog-comments",
+  //   icon: <Icon fontSize="small">person</Icon>,
+  //   route: "/blog-comments",
+  //   component: <BlogComment />,
+  // },
 
 ];
 
