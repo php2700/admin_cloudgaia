@@ -54,6 +54,7 @@ import Growth from "layouts/growth";
 import Implementation from "layouts/implemention";
 import Optimization from "layouts/optimization";
 import BlogComment from "layouts/blogComment";
+import PrivacyPolicy from "layouts/privacyPolicy";
 
 
 const routes = [
@@ -147,6 +148,14 @@ const routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/optimization",
     component: <Optimization />,
+  },
+   {
+    type: "collapse",
+    name: "privacyPolicy",
+    key: "privacyPolicy",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/privacyPolicy",
+    component: <PrivacyPolicy />,
   },
   // {
   //   type: "collapse",
