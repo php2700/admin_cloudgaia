@@ -55,6 +55,7 @@ import Implementation from "layouts/implemention";
 import Optimization from "layouts/optimization";
 import BlogComment from "layouts/blogComment";
 import PrivacyPolicy from "layouts/privacyPolicy";
+import CookieSetting from "layouts/cookieSetting";
 
 
 const routes = [
@@ -149,13 +150,21 @@ const routes = [
     route: "/optimization",
     component: <Optimization />,
   },
-   {
+  {
     type: "collapse",
     name: "privacyPolicy",
     key: "privacyPolicy",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/privacyPolicy",
     component: <PrivacyPolicy />,
+  },
+  {
+    type: "collapse",
+    name: "cookieSetting",
+    key: "cookieSetting",
+    icon: <Icon fontSize="small">person</Icon>,
+    route: "/cookieSetting",
+    component: <CookieSetting />,
   },
   // {
   //   type: "collapse",
