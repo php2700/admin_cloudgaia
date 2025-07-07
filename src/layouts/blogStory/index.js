@@ -272,14 +272,13 @@ function Overview() {
                                                                     variant="caption"
                                                                     color="text"
                                                                     fontWeight="medium"
-                                                                    // sx prop yahan add karein
+                                                                    
                                                                     sx={{
-                                                                        // Ye 3 properties milkar magic karti hain
                                                                         overflow: 'hidden',
                                                                         with:'100%',
                                                                         textOverflow: 'ellipsis',
                                                                         display: '-webkit-box',
-                                                                        WebkitLineClamp: '2', // Yahan batayein kitni lines chahiye (aapke case mein 2)
+                                                                        WebkitLineClamp: '2',
                                                                         WebkitBoxOrient: 'vertical',
                                                                          wordBreak: 'break-word',
                                                                     }}
