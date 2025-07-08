@@ -145,8 +145,8 @@ function CookieSetting() {
             <MDSnackbar
                 color="success"
                 icon="check"
-                title="Privacy Policy"
-                content="Privacy Policy Added Successfully!"
+                title="Cookie Setting"
+                content="Cookie Setting Added Successfully!"
                 dateTime="0 Sec ago"
                 open={successSB}
                 onClose={() => setSuccessSB(false)}

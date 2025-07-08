@@ -40,12 +40,13 @@ import { logout } from "layouts/common";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import MDButton from "components/MDButton";
-
+import 'react-quill/dist/quill.snow.css';
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 const modules = {
     toolbar: [
         [{ header: [1, 2, 3, false] }],
+        [{ size: ['small', false, 'large', 'huge'] }],
         ['bold', 'italic', 'underline', 'strike'],
         [{ color: [] }, { background: [] }],
         [{ list: 'ordered' }, { list: 'bullet' }],
@@ -56,7 +57,7 @@ const modules = {
 };
 
 const formats = [
-    'header', 'bold', 'italic', 'underline', 'strike',
+    'header', 'size', 'bold', 'italic', 'underline', 'strike',
     'color', 'background', 'list', 'bullet',
     'blockquote', 'code-block', 'link',
 ];
@@ -73,7 +74,6 @@ function PrivacyPolicy() {
             await axios
                 .get(`${process.env.REACT_APP_BASE_URL}api/user/privacy-policy`)
                 .then((res) => {
-                    console.log(res?.data?.privacyPolicy);
                     setContent(res?.data?.privacyPolicy?.privacyPolicy)
                 })
                 .catch((error) => {
@@ -114,7 +114,7 @@ function PrivacyPolicy() {
                 <MDBox pt={6} pb={3}>
                     <Grid container spacing={6}>
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", boxShadow: "1px 1px 1px 1px #888888", background: 'white', width: '60% ', padding: '20px', borderRadius: '10px', gap: '5px' }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", boxShadow: "1px 1px 1px 1px #888888", background: 'white', width: '60%', padding: '20px', borderRadius: '10px', gap: '5px' }}>
                                 <MDTypography variant="h6" mt={2} mb={2}>
                                     Privacy policy
                                 </MDTypography>
@@ -129,7 +129,7 @@ function PrivacyPolicy() {
                                         theme="snow"
                                         placeholder="Blog Detail"
                                         style={{
-                                            height: "250px",
+                                            height: "250px"
                                         }}
                                     />
                                 </MDBox>
